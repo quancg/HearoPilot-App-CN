@@ -2,68 +2,50 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
-    android:viewportWidth="4057"
-    android:viewportHeight="4057">
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
   <group
-      android:translateX="913"
-      android:translateY="913"
-      android:scaleX="0.55"
-      android:scaleY="0.55">
-    <group
-        android:translateX="-1409"
-        android:translateY="-1409">
-      <path
-          android:pathData="M2382,2603 C2382,2525.68 2444.68,2463 2522,2463 L2534,2463 C2611.32,2463 2674,2525.68 2674,2603 L2674,4272 C2674,4349.32 2611.32,4412 2534,4412 L2522,4412 C2444.68,4412 2382,4349.32 2382,4272 Z"
-          android:fillColor="#FFFFFF"
-          android:fillType="evenOdd"/>
-      <path
-          android:pathData="M1896,2928 C1896,2850.68 1958.68,2788 2036,2788 L2048,2788 C2125.32,2788 2188,2850.68 2188,2928 L2188,3947 C2188,4024.32 2125.32,4087 2048,4087 L2036,4087 C1958.68,4087 1896,4024.32 1896,3947 Z"
-          android:fillColor="#FFFFFF"
-          android:fillType="evenOdd"/>
-      <path
-          android:pathData="M1409,3188.48 C1409,3110.89 1471.89,3048 1549.48,3048 L1561.51,3048 C1639.09,3048 1701.99,3110.89 1701.99,3188.48 L1701.99,3686.52 C1701.99,3764.11 1639.09,3827 1561.51,3827 L1549.48,3827 C1471.89,3827 1409,3764.11 1409,3686.52 Z"
-          android:fillColor="#FFFFFF"
-          android:fillType="evenOdd"/>
-      <group
-          android:pivotX="3438"
-          android:pivotY="3438"
-          android:scaleX="1.2"
-          android:scaleY="1.2">
-        <path
-            android:pathData="M3438,2837.5 C3438,3138 3738,3438 4038.5,3438 C3738,3438 3438,3738 3438,4038.5 C3438,3738 3138,3438 2837.5,3438 C3138,3438 3438,3138 3438,2837.5 Z"
-            android:fillColor="#FFFFFF"
-            android:fillType="evenOdd"/>
-      </group>
-      <group
-          android:translateX="4493"
-          android:translateY="2463"
-          android:scaleX="-1"
-          android:scaleY="1">
-        <path
-            android:pathData="M0,140.002 C0,62.6812 62.6816,0 140.003,0 L151.997,0 C229.319,0 292,62.6812 292,140.002 L292,1809 C292,1886.32 229.319,1949 151.997,1949 L140.003,1949 C62.6816,1949 0,1886.32 0,1809 Z"
-            android:fillColor="#FFFFFF"
-            android:fillType="evenOdd"/>
-      </group>
-      <group
-          android:translateX="4979"
-          android:translateY="2788"
-          android:scaleX="-1"
-          android:scaleY="1">
-        <path
-            android:pathData="M0,140.002 C0,62.681 62.6811,0 140.002,0 L151.998,0 C229.319,0 292,62.681 292,140.002 L292,1159 C292,1236.32 229.319,1299 151.998,1299 L140.002,1299 C62.6811,1299 0,1236.32 0,1159 Z"
-            android:fillColor="#FFFFFF"
-            android:fillType="evenOdd"/>
-      </group>
-      <group
-          android:translateX="5466"
-          android:translateY="3048"
-          android:scaleX="-1"
-          android:scaleY="1">
-        <path
-            android:pathData="M0,140.476 C0,62.8931 62.8932,0 140.476,0 L152.511,0 C230.094,0 292.987,62.8931 292.987,140.476 L292.987,638.524 C292.987,716.107 230.094,779 152.511,779 L140.476,779 C62.8932,779 0,716.107 0,638.524 Z"
-            android:fillColor="#FFFFFF"
-            android:fillType="evenOdd"/>
-      </group>
-    </group>
+      android:pivotX="256"
+      android:pivotY="256"
+      android:scaleX="1.10"
+      android:scaleY="1.10">
+
+    <!-- L1 tail (x=158, w=16, h=48) — opacity 0.5 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.5"
+        android:pathData="M158,240 C158,235.58 161.58,232 166,232 C170.42,232 174,235.58 174,240 L174,272 C174,276.42 170.42,280 166,280 C161.58,280 158,276.42 158,272 Z"/>
+    <!-- L2 outer (x=187, w=18, h=80) — opacity 0.7 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.7"
+        android:pathData="M187,225 C187,220.03 191.03,216 196,216 C200.97,216 205,220.03 205,225 L205,287 C205,291.97 200.97,296 196,296 C191.03,296 187,291.97 187,287 Z"/>
+    <!-- L3 mid (x=216, w=20, h=128) — opacity 0.88 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.88"
+        android:pathData="M216,202 C216,196.48 220.48,192 226,192 C231.52,192 236,196.48 236,202 L236,310 C236,315.52 231.52,320 226,320 C220.48,320 216,315.52 216,310 Z"/>
+
+    <!-- R3 mid (x=276, w=20, h=128) — opacity 0.88 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.88"
+        android:pathData="M276,202 C276,196.48 280.48,192 286,192 C291.52,192 296,196.48 296,202 L296,310 C296,315.52 291.52,320 286,320 C280.48,320 276,315.52 276,310 Z"/>
+    <!-- R2 outer (x=307, w=18, h=80) — opacity 0.7 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.7"
+        android:pathData="M307,225 C307,220.03 311.03,216 316,216 C320.97,216 325,220.03 325,225 L325,287 C325,291.97 320.97,296 316,296 C311.03,296 307,291.97 307,287 Z"/>
+    <!-- R1 tail (x=338, w=16, h=48) — opacity 0.5 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.5"
+        android:pathData="M338,240 C338,235.58 341.58,232 346,232 C350.42,232 354,235.58 354,240 L354,272 C354,276.42 350.42,280 346,280 C341.58,280 338,276.42 338,272 Z"/>
+
+    <!-- Central AI sparkle — drawn LAST (foreground) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M256,156 C256,206 306,256 356,256 C306,256 256,306 256,356 C256,306 206,256 156,256 C206,256 256,206 256,156 Z"/>
   </group>
 </vector>
