@@ -14,7 +14,7 @@ enum class LlmModelVariant {
     Q8_0,
 
     /**
-     * 4-bit non-linear quantization — ~35 % smaller (~650 MB), lower CPU load and battery use.
+     * 4-bit non-linear quantization — ~650 MB on disk, lower CPU load and battery use.
      * Recommended for mid-range and older devices (e.g. Snapdragon 865 / Cortex-A77 era).
      */
     IQ4_NL,
