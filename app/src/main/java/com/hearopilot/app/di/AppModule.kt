@@ -1,11 +1,10 @@
-﻿package com.hearopilot.app.di
+package com.hearopilot.app.di
 
 import android.content.Context
 import com.arm.aichat.InferenceEngine
 import com.k2fsa.sherpa.onnx.OfflineRecognizer
 import com.k2fsa.sherpa.onnx.OfflineRecognizerConfig
 import com.k2fsa.sherpa.onnx.Vad
-import com.k2fsa.sherpa.onnx.getOfflineModelConfig
 import com.hearopilot.app.ui.SimulateStreamingAsr
 import com.hearopilot.app.data.datasource.ModelDownloadManager
 import com.hearopilot.app.domain.repository.SettingsRepository
@@ -31,32 +30,29 @@ object AppModule {
     @Provides
     fun provideOfflineRecognizer(
         @ApplicationContext context: Context,
-        modelDownloadManager: ModelDownloadManager
+        modelDownloadManager: ModelDownloadManager // 保留参数防止编译报错，但不再使用
     ): OfflineRecognizer {
-        // Get STT model path from downloaded files
-        val sttModelPath = modelDownloadManager.getSttModelPath()
-            ?: throw IllegalStateException("STT model not downloaded. Please download the model first.")
+        // 1. 获取应用的外部文件目录（Android/data/com.hearopilot.app/files/）
+        val baseDir = context.getExternalFilesDir(null) ?: context.filesDir
+        val sttModelPath = java.io.File(baseDir, "stt_model").absolutePath
 
-        // Model type 40 = sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8
-        val config = getOfflineModelConfig(type = 40)!!
+        // 2. 构建 Paraformer 配置，指向外部存储的路径
+        val paraformerConfig = com.k2fsa.sherpa.onnx.ParaformerModelConfig().apply {
+            encoder = "$sttModelPath/encoder.int8.onnx"
+            decoder = "$sttModelPath/decoder.int8.onnx"
+            // Paraformer 不需要 joiner
+        }
 
-        // Override model paths to use downloaded files instead of assets
-        config.transducer.encoder = "$sttModelPath/encoder.int8.onnx"
-        config.transducer.decoder = "$sttModelPath/decoder.int8.onnx"
-        config.transducer.joiner = "$sttModelPath/joiner.int8.onnx"
-        config.tokens = "$sttModelPath/tokens.txt"
+        val modelConfig = com.k2fsa.sherpa.onnx.OfflineModelConfig().apply {
+            this.paraformer = paraformerConfig
+            tokens = "$sttModelPath/tokens.txt"
+            numThreads = 2
+        }
 
-        // Fixed 2 threads for STT to avoid CPU contention with the LLM engine
-        // (which also uses multiple threads). On an 8-core device, 4 STT + 4 LLM
-        // saturates all cores causing inference spikes up to 9s during LLM generation.
-        // With 2 threads, STT leaves headroom for the LLM and OS scheduler.
-        config.numThreads = 2
-        Log.i("AppModule", "STT: ${config.numThreads} threads (fixed)")
-
-        // Create recognizer WITHOUT assetManager (loading from file system)
+        // 3. assetManager = null 表示从文件系统加载（而不是 apk 内部）
         return OfflineRecognizer(
             assetManager = null,
-            config = OfflineRecognizerConfig(modelConfig = config)
+            config = OfflineRecognizerConfig(modelConfig = modelConfig)
         )
     }
 
@@ -65,10 +61,8 @@ object AppModule {
         @ApplicationContext context: Context,
         settingsRepository: SettingsRepository
     ): Vad {
-        // Read VAD parameters from settings
         val settings = runBlocking { settingsRepository.getSettings().first() }
 
-        // Initialize using existing SimulateStreamingAsr logic with custom parameters
         SimulateStreamingAsr.initVad(
             assetManager = context.assets,
             minSilenceDuration = settings.vadMinSilenceDuration,
