@@ -17,19 +17,10 @@ data class ModelConfig(
 )
 
 // STT config is shared across all LLM variants.
-// private const val STT_BASE_URL =
-    "https://huggingface.co/csukuangfj/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8/resolve/main"
+
 private const val STT_BASE_URL =
     "https://huggingface.co/k2-fsa/sherpa-onnx/releases/download/asr-models"
-    
-/*
-private val STT_FILES = listOf(
-    "encoder.int8.onnx",
-    "decoder.int8.onnx",
-    "joiner.int8.onnx",
-    "tokens.txt"
-)
-*/
+
 private val STT_FILES = listOf(
     "sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20.tar.bz2"
 )
