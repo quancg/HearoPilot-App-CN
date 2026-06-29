@@ -4,8 +4,9 @@ import android.content.Context
 import com.arm.aichat.InferenceEngine
 import com.k2fsa.sherpa.onnx.OfflineRecognizer
 import com.k2fsa.sherpa.onnx.OfflineRecognizerConfig
+import com.k2fsa.sherpa.onnx.OfflineModelConfig
+import com.k2fsa.sherpa.onnx.OfflineTransducerModelConfig
 import com.k2fsa.sherpa.onnx.Vad
-import com.k2fsa.sherpa.onnx.getOfflineModelConfig
 import com.hearopilot.app.ui.SimulateStreamingAsr
 import com.hearopilot.app.data.datasource.ModelDownloadManager
 import com.hearopilot.app.domain.repository.SettingsRepository
@@ -37,26 +38,36 @@ object AppModule {
         val sttModelPath = modelDownloadManager.getSttModelPath()
             ?: throw IllegalStateException("STT model not downloaded. Please download the model first.")
 
-        // Model type 40 = sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8
-        val config = getOfflineModelConfig(type = 40)!!
+        // 1. 定义中文 Zipformer 双语模型的目录名（解压后的文件夹名）
+        val modelDir = "$sttModelPath/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20"
 
-        // Override model paths to use downloaded files instead of assets
-        config.transducer.encoder = "$sttModelPath/encoder.int8.onnx"
-        config.transducer.decoder = "$sttModelPath/decoder.int8.onnx"
-        config.transducer.joiner = "$sttModelPath/joiner.int8.onnx"
-        config.tokens = "$sttModelPath/tokens.txt"
+        // 2. 手动构建 Transducer 配置，路径必须匹配 tar.bz2 内部目录结构
+        val transducerConfig = OfflineTransducerModelConfig(
+            encoder = "$modelDir/exp/encoder-epoch-99-avg-1-chunk-16-left-128.int8.onnx",
+            decoder = "$modelDir/exp/decoder-epoch-99-avg-1-chunk-16-left-128.onnx",
+            joiner = "$modelDir/exp/joiner-epoch-99-avg-1-chunk-16-left-128.onnx"
+        )
 
-        // Fixed 2 threads for STT to avoid CPU contention with the LLM engine
-        // (which also uses multiple threads). On an 8-core device, 4 STT + 4 LLM
-        // saturates all cores causing inference spikes up to 9s during LLM generation.
-        // With 2 threads, STT leaves headroom for the LLM and OS scheduler.
-        config.numThreads = 2
-        Log.i("AppModule", "STT: ${config.numThreads} threads (fixed)")
+        // 3. 构建 Model 配置
+        val modelConfig = OfflineModelConfig(
+            transducer = transducerConfig,
+            tokens = "$modelDir/data/lang_char/tokens.txt",
+            // 关键：中文 Zipformer 离线模型不需要 modelType，设为空字符串
+            modelType = "",
+            // Fixed 2 threads for STT to avoid CPU contention with the LLM engine
+            numThreads = 2
+        )
 
-        // Create recognizer WITHOUT assetManager (loading from file system)
+        Log.i("AppModule", "STT: Using Zipformer Bilingual Zh-En model")
+        Log.i("AppModule", "STT: ${modelConfig.numThreads} threads (fixed)")
+
+        // 4. 创建识别器配置
+        val config = OfflineRecognizerConfig(modelConfig = modelConfig)
+
+        // 5. 创建识别器 (不使用 AssetManager，直接从文件系统加载)
         return OfflineRecognizer(
             assetManager = null,
-            config = OfflineRecognizerConfig(modelConfig = config)
+            config = config
         )
     }
 
