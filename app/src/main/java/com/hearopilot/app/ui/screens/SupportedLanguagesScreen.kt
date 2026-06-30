@@ -33,6 +33,7 @@ private fun languageFlagEmoji(code: String): String {
         "de" -> "DE"
         "el" -> "GR"
         "en" -> "GB"
+        "zh" -> "CN"
         "es" -> "ES"
         "et" -> "EE"
         "fi" -> "FI"
