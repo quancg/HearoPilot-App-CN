@@ -33,6 +33,7 @@ object SupportedLanguages {
         SupportedLanguage("da", "Danish",      "Dansk"),
         SupportedLanguage("nl", "Dutch",       "Nederlands"),
         SupportedLanguage("en", "English",     "English"),
+        SupportedLanguage("zh", "Chinese",     "中文"),
         SupportedLanguage("et", "Estonian",    "Eesti"),
         SupportedLanguage("fi", "Finnish",     "Suomi"),
         SupportedLanguage("fr", "French",      "Français"),
